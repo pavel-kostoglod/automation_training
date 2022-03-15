@@ -47,4 +47,15 @@ class CartTest {
         );
     }
 
+    @Test
+    void checkTotalPriceAfterItemsRemoving() {
+        cart.deleteRealItem(realItem);
+        cart.deleteVirtualItem(virtualItem);
+        Assertions.assertEquals((
+                (realItemPrice + realItemPrice*TAX) +
+                (virtualItemPrice + virtualItemPrice*TAX)),
+                cart.getTotalPrice()
+        );
+    }
+
 }
