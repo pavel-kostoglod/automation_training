@@ -51,10 +51,7 @@ class CartTest {
     void checkTotalPriceAfterItemsRemoving() {
         cart.deleteRealItem(realItem);
         cart.deleteVirtualItem(virtualItem);
-        Assertions.assertEquals((
-                (realItemPrice + realItemPrice*TAX) +
-                (virtualItemPrice + virtualItemPrice*TAX)),
-                cart.getTotalPrice()
+        Assertions.assertEquals(0, cart.getTotalPrice()
         );
     }
 
