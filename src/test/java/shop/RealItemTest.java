@@ -1,16 +1,17 @@
 package shop;
 
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
+
+import org.testng.Assert;
+import org.testng.annotations.Test;
 
 import java.util.Random;
 
 public class RealItemTest {
-    @Test
+    @Test(groups = {"group_2"})
     void getWeightIsEqualToSet () {
         double r = new Random().nextDouble();
         RealItem realItem = new RealItem();
         realItem.setWeight(r);
-        Assertions.assertEquals(r, realItem.getWeight());
+        Assert.assertEquals(r, realItem.getWeight());
     }
 }

@@ -1,14 +1,13 @@
 package shop;
 
 import org.apache.commons.lang3.RandomStringUtils;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
+import org.testng.Assert;
+import org.testng.annotations.BeforeTest;
+import org.testng.annotations.Test;
 
 import java.util.Random;
 
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+
 class CartTest {
     private Cart cart;
     private static final double TAX = 0.2;
@@ -18,7 +17,7 @@ class CartTest {
     private double realItemPrice;
     private double virtualItemPrice;
 
-    @BeforeAll
+    @BeforeTest
     void createCartAndItems() {
         cartName = RandomStringUtils.random(10, true, false);
         cart = new Cart(cartName);
@@ -33,25 +32,25 @@ class CartTest {
         cart.showItems();
     }
 
-    @Test
+    @Test(groups = {"group_1", "group_2"})
     void getCartNameIsEqualToPassedToConstructor() {
-        Assertions.assertEquals(cartName, cart.getCartName());
+        Assert.assertEquals(cartName, cart.getCartName());
     }
 
-    @Test
+    @Test(groups = {"group_2"})
     void getTotalPriceEqualToSumOfItemsPricesPlusTax() {
-        Assertions.assertEquals((
+        Assert.assertEquals((
                 (realItemPrice + realItemPrice*TAX) +
                 (virtualItemPrice + virtualItemPrice*TAX)),
                 cart.getTotalPrice()
         );
     }
 
-    @Test
+    @Test(groups = {"group_2"})
     void checkTotalPriceAfterItemsRemoving() {
         cart.deleteRealItem(realItem);
         cart.deleteVirtualItem(virtualItem);
-        Assertions.assertEquals(0, cart.getTotalPrice()
+        Assert.assertEquals(0, cart.getTotalPrice()
         );
     }
 

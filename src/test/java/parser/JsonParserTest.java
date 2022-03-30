@@ -1,9 +1,9 @@
 package parser;
 
 import org.apache.commons.lang3.RandomStringUtils;
-import org.junit.jupiter.api.*;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.ValueSource;
+import org.testng.Assert;
+import org.testng.annotations.*;
+import org.testng.asserts.SoftAssert;
 import shop.Cart;
 import shop.RealItem;
 import shop.VirtualItem;
@@ -20,7 +20,7 @@ public class JsonParserTest {
     private RealItem ri;
     private VirtualItem vi;
 
-    @BeforeEach
+    @BeforeTest(groups = {"setup"})
     void prepare() {
         jsonParser = new JsonParser();
         cartName = RandomStringUtils.random(10, true, false);
@@ -46,9 +46,9 @@ public class JsonParserTest {
         file2 = new File("src/main/resources/" + cart.getCartName() + "_util.json");
     }
 
-    @Test
+    @Test(groups = {"group_1"})
     void writeToFileWritesCorrectCartInfo() {
-        Assertions.assertEquals(Utils.readFromFile(file), String.format(
+        Assert.assertEquals(Utils.readFromFile(file), String.format(
                 "{\"cartName\":\"%s\",\"realItems\":[{\"weight\":%.1f,\"name\":\"%s\",\"price\":%.2f}]," +
                         "\"virtualItems\":[{\"sizeOnDisk\":%.2f,\"name\":\"%s\",\"price\":%.2f}],\"total\":%.3f}",
                 cartName, ri.getWeight(), ri.getName(), ri.getPrice(),
@@ -56,38 +56,37 @@ public class JsonParserTest {
         ));
     }
 
-    @Test
+    @Test(groups = {"group_1"})
     void readFromFileReadsCorrectCartInfo() {
         Cart cart2 = jsonParser.readFromFile(file2);
-        Assertions.assertAll(
-                () -> Assertions.assertEquals(cart2.getCartName(), cart.getCartName()),
-                () -> Assertions.assertEquals(cart2.getTotalPrice(), cart.getTotalPrice())
-        );
+        SoftAssert softAssert = new SoftAssert();
+        softAssert.assertEquals(cart2.getCartName(), cart.getCartName());
+        softAssert.assertEquals(cart2.getTotalPrice(), cart.getTotalPrice());
     }
 
 
-    @Test
-    @Disabled
+    @Test(groups = {"group_1", "group_2"}, enabled = false)
     void writeToFileCreatesNewFile() {
-        Assertions.assertTrue(file.exists());
+        Assert.assertTrue(file.exists());
     }
 
-    // Exception test. Parametrized
-    @ParameterizedTest
-    @ValueSource(strings = {
-            "src/main/resources/nonexistent.json",
-            "src/main/resources/nonexistent.txt",
-            "src/main/nonexistent.json",
-            "src/nonexistent.json",
-            "nonexistent.json"
-    })
+    @Test(groups = {"group_2"}, dataProvider = "filePathProvider")
     void noSuchFileExceptionThrownIfNonexistentFilenameProvided (String filePath) {
-        Assertions.assertThrows(NoSuchFileException.class,
+        Assert.assertThrows(NoSuchFileException.class,
                 () -> jsonParser.readFromFile(new File(filePath))
         );
     }
 
-    @AfterEach
+    @DataProvider(name = "filePathProvider")
+    public static Object[][] filePath() {
+        return new Object[][] {{"src/main/resources/nonexistent.json"},
+                                {"src/main/resources/nonexistent.txt"},
+                                {"src/main/nonexistent.json"},
+                                {"src/nonexistent.json"},
+                                {"nonexistent.json"}};
+    }
+
+    @AfterTest(groups = {"teardown"})
     void cleanUp() {
         file.delete();
         file2.delete();

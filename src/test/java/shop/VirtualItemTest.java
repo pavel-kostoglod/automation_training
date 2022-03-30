@@ -1,16 +1,17 @@
 package shop;
 
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
+
+import org.testng.Assert;
+import org.testng.annotations.Test;
 
 import java.util.Random;
 
 public class VirtualItemTest {
-    @Test
+    @Test(groups = {"group_1"})
     void getSizeIsEqualToSet () {
         double r = new Random().nextDouble();
         VirtualItem virtualItem1 = new VirtualItem();
         virtualItem1.setSizeOnDisk(r);
-        Assertions.assertEquals(r, virtualItem1.getSizeOnDisk());
+        Assert.assertEquals(r, virtualItem1.getSizeOnDisk());
     }
 }
