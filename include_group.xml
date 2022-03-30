@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd" >
+<suite name="TestSuite1" >
+    <test name="TestCase1" >
+        <groups>
+            <run>
+                <include name = "setup"></include>
+                <include name = "group_1"></include>
+                <include name = "teardown"></include>
+            </run>
+        </groups>
+        <classes>
+            <class name="parser.JsonParserTest" />
+        </classes>
+    </test>
+</suite>
